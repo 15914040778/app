@@ -1,0 +1,3 @@
+rootProject.name = 'Chenbingji'
+
+include ':app'

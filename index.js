@@ -1,5 +1,5 @@
 import { AppRegistry } from 'react-native';
 import App from './App';
-import {Index , Header , Banner} from './IndexApp.js';
+import {Home} from './Home';
 
-AppRegistry.registerComponent('Chenbingji', () => Index);
+AppRegistry.registerComponent('Chenbingji', () => App);

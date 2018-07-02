@@ -6,53 +6,61 @@
 
 import React, { Component } from 'react';
 import {
+  AppRegistry,
   Platform,
   StyleSheet,
   Text,
-  View
+  View,
+  Button
 } from 'react-native';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+import { StackNavigator } from 'react-navigation';
 
-type Props = {};
-export default class App extends Component<Props> {
+//首页模块
+import { Home } from './Home';
+
+export default class App extends Component {
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Hello World
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit App.js
-        </Text>
-        <Text style={styles.instructions}>
-          {instructions}
-        </Text>
+      <ModalStack />
+    );
+  }
+}
+class Test extends Component {
+
+  static navigationOptions = {
+    title: 'Test',
+    header: {
+      visible: true,
+      title: '菜单',
+      right: 'right'
+    }
+  }
+
+  render() {
+    const { navigate } = this.props.navigation;
+    return (
+      <View>
+        <Text>点击跳转Test</Text>
+        <Button
+          onPress={() => navigate('Home')}
+          title="点击跳转Test"
+        />
       </View>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+//StackNavigator
+const ModalStack = StackNavigator({
+
+  Home: {
+    screen: Home
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+  cityMenu: {
+    screen: cityMenu
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+  Test: {
+    screen: Test
+  }
 });

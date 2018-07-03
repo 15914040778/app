@@ -9,16 +9,26 @@ import React, { Component } from 'react';
 
 import {
   AppRegistry,
+  //类似HTML中的DIV
   View,
+  //与HTML不同的是：
+  //1.”src“改成了“source”
+  //2.引用本地图片时 需使用require
+  //比如：
+  //    <Image source={require('./src/images/index/logo.png')} />
   Image,
+  //放本文的
   Text,
+  //HTML中的Input的text类型
   TextInput,
   Dimensions,
+  //提供放置样式的
+  //使用它的好处：https://reactnative.cn/docs/0.36/stylesheet.html
   StyleSheet,
   PixelRatio,
   TouchableOpacity,
+  //HTML的Button标签
   Button,
-  Alert
  } from 'react-native';
 //轮播图依赖模块
 import Swiper from 'react-native-swiper';
@@ -38,6 +48,54 @@ const styles = StyleSheet.create({
     height: 28,
     width: 28,
     marginRight: 20
+  },
+  headerRightSidebar: {
+    position: 'absolute',
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+    backgroundColor: 'rgba(0 , 0 , 0 , 0.25)',
+    zIndex: 10
+  },
+  headerRightSidebarHide: {
+    display: 'none',
+  },
+  headerRightSidebarView: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    backgroundColor: '#fff',
+    height: 101,
+    alignContent: 'stretch'
+    },
+  //感觉命名会越来越长
+  headerRightSidebarViewOption: {
+    flex: 1,
+    alignContent: 'stretch',
+    paddingLeft: 30,
+    paddingRight: 30,
+    paddingTop: 30,
+    paddingBottom: 30,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderStyle: 'solid',
+    height: 101,
+    backgroundColor: '#fff',
+    minWidth: Dimensions.get('window').width / 3,
+    maxWidth: Dimensions.get('window').width / 3
+  },
+  headerRightSidebarImage: {
+    resizeMode: 'stretch',
+    width: 25,
+    height: 25,
+    marginBottom: 10,
+    paddingTop: 0,
+    marginLeft: 'auto',
+    marginRight: 'auto'
+  },
+  headerRightSidebarText: {
+    fontSize: 16,
+    height: 16,
+    paddingTop: 0,
+    textAlign: 'center'
   },
   headerLeft: {
     flexDirection: 'row',
@@ -90,6 +148,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginRight: 5
   },
+
   menuView: {
     backgroundColor: '#fff',
     flexDirection: 'row',
@@ -116,7 +175,8 @@ const styles = StyleSheet.create({
   //最新资讯
   newNewsView: {
     flexDirection: 'row',
-    marginTop: 20,
+    marginTop: 15,
+    marginBottom: 15,
     backgroundColor: '#fff',
     width: Dimensions.get('window').width,
     height: 50,
@@ -163,16 +223,55 @@ const styles = StyleSheet.create({
     flex: 3,
     marginLeft: 10,
     lineHeight: 20,
+  },
+  //新房筛选模块
+  newHouseScreenMenu: {
+    height: 160,
+    width: Dimensions.get('window').width,
+    backgroundColor: '#fff'
+  },
+  newHouseScreenMenuList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  newHouseScreenMenuText: {
+    flex: 1,
+    maxWidth: Dimensions.get('window').width / 3,
+    minWidth: Dimensions.get('window').width / 3,
+    textAlign: 'center',
+    marginTop: 5,
+
   }
 });
+//生命全局变量
+let that;
 
 //架构模块
 export default class Home extends Component {
-  _onPressButton() {
-    Alert.alert('---');
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      headerRightSidebar: true,
+      images: [
+        {
+          url:require('./src/images/index/banner01.jpg'),
+        },
+        {
+          url:require('./src/images/index/banner02.jpg'),
+        }
+      ],
+    };
+    that = this;
   }
+  clickHeaderRightSidebar() {
+    this.setState({
+      headerRightSidebar: !this.state.headerRightSidebar
+    });
+  }
+  //设置header模块
   static navigationOptions = {
-    title: '首页',
+    //设置header的标题或者模块
     headerTitle: (
       <View>
         <Image
@@ -180,27 +279,29 @@ export default class Home extends Component {
           source={require('./src/images/index/logo.png')} />
       </View>
     ),
-    headerRight:(
-     	<View>
-        <TouchableOpacity
-          onPress={this._onPressButton}>
-          <Image
-            style={styles.headerRight}
-            source={require('./src/images/index/naviright.png')}
-          />
-        </TouchableOpacity>
-     	</View>
+    //右边
+    headerRight: (
+          <View style={styles.headerRight}>
+            //TouchableOpacity标签提供了点击效果 只是点击时 当前模块透明度发生改变的动画效果
+            //具体业务逻辑需使用“onPress”属性进行绑定自定义回调函数进行编写业务逻辑(需要实现的效果)
+            <TouchableOpacity
+              onPress={() => that.clickHeaderRightSidebar()}>
+              <Image
+                style={styles.headerRight}
+                source={require('./src/images/index/naviright.png')} />
+            </TouchableOpacity>
+         	</View>
     ),
+    //左边
     headerLeft:(
       <View style={styles.headerLeft}>
         <TouchableOpacity
-          onPress={this.props.navigation.navigate('cityMenu')}
-        >
-        <Text style={styles.headerLeftText}>深圳</Text>
-        <Image
-          style={styles.headerLeftImage}
-          source={require('./src/images/index/jiantou_xpz.png')}
-        />
+        style={styles.headerLeft}
+        onPress={() => that.props.navigation.navigate('CityMenu')} >
+          <Text style={styles.headerLeftText}>深圳</Text>
+          <Image
+            style={styles.headerLeftImage}
+            source={require('./src/images/index/jiantou_xpz.png')}/>
         </TouchableOpacity>
       </View>
     )
@@ -210,25 +311,69 @@ export default class Home extends Component {
   render() {
     return (
       <View style={styles.body}>
+        <Sidebar />
         <Banner />
         <Menu />
         <NewNews />
+        <NewHouseScreenMenu />
       </View>
     );
   }
 };
 
-//头部模块
-class Header extends Component {
+//侧边栏模块
+class Sidebar extends Component {
+  clickHeaderRightSidebar() {
+    alert('JJJ');
+  }
   render() {
     return (
-      <View style={{height:50,flexDirection:'row'}}>
-        <View style={{flex: 1, backgroundColor: 'powderblue'}} />
-        <View style={{flex: 3, backgroundColor: 'skyblue', flexDirection: 'row', height: 50}} >
-          <View style={{flex: 1, backgroundColor: 'steelblue'}}></View>
-          <View style={{flex: 1, backgroundColor: 'powderblue'}}></View>
-        </View>
-        <View style={{flex: 1, backgroundColor: 'steelblue'}} />
+      //第一层设置背景层
+      <View
+        style={[styles.headerRightSidebar , that.state.headerRightSidebar && styles.headerRightSidebarHide]}>
+        <TouchableOpacity
+          style={styles.headerRightSidebar}
+          onPress={() => that.clickHeaderRightSidebar()}>
+          //模块底层
+          <View style={styles.headerRightSidebarView}>
+            //选项
+            <View style={styles.headerRightSidebarViewOption}>
+              <Image
+                source={require('./src/images/index/shouye01.png')}
+                style={styles.headerRightSidebarImage}
+              />
+              <Text style={styles.headerRightSidebarText}>首页</Text>
+            </View>
+            <View style={styles.headerRightSidebarViewOption}>
+              <Image
+                source={require('./src/images/index/xinfang02.png')}
+                style={styles.headerRightSidebarImage}
+              />
+              <Text style={styles.headerRightSidebarText}>新房楼盘</Text>
+            </View>
+            <View style={styles.headerRightSidebarViewOption}>
+              <Image
+                source={require('./src/images/index/youhuituangou07.png')}
+                style={styles.headerRightSidebarImage}
+              />
+              <Text style={styles.headerRightSidebarText}>优惠团购</Text>
+            </View>
+            <View style={styles.headerRightSidebarViewOption}>
+              <Image
+                source={require('./src/images/index/shouye01.png')}
+                style={styles.headerRightSidebarImage}
+              />
+              <Text style={styles.headerRightSidebarText}>首页</Text>
+            </View>
+            <View style={styles.headerRightSidebarViewOption}>
+              <Image
+                source={require('./src/images/index/shouye01.png')}
+                style={styles.headerRightSidebarImage}
+              />
+              <Text style={styles.headerRightSidebarText}>首页</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -322,8 +467,10 @@ class Menu extends Component {
 
 //最新资讯模块
 class NewNews extends Component {
+  //类似React的组件中的初始化回调函数“getInitialState”
   constructor(props) {
     super(props);
+    //设置state变量
     this.state = {
       data:[
         {
@@ -352,6 +499,8 @@ class NewNews extends Component {
           <Image style={styles.newNewsViewLeftImage} source={require('./src/images/index/zuixinzixun.png')} />
         </View>
         <View style={styles.newNewsViewRight}>
+        // 采用"Swiper"实现轮播效果
+        // 具体参数详情 https://js.coach/react-native-swiper?search=react-native-swiper
         <Swiper
             style={styles.swiper}
             height={250}
@@ -363,9 +512,13 @@ class NewNews extends Component {
             scrollEnabled={false}
             autoplayTimeout={3}>
             {
-              //一边遍历可以按照这样 使用map遍历
+              //一般遍历可以按照这样 使用map遍历
+              //类似于JQuery中的$.each(Object , function[key , object])
+              //不同的是：map的第二个参数“function[key , object]”的参数与JQuery的$.each()的第二个参数的参数“function[key , object]”是位置相反的
+              //当然如果第二个参数都只设置了一个参数时，那么它们是相同的 都是Object
               this.state.data.map(function(obj, key){
                 return (
+                  //key={key}这个在遍历的时候 如果不写会出现一个警告
                   <View style={styles.newNewsList} key={key}>
                     <Text style={styles.newNewsListType}>{obj.type}</Text>
                     <Text style={styles.newNewsListTitle}>{obj.title}</Text>
@@ -374,15 +527,45 @@ class NewNews extends Component {
               })
             }
           </Swiper>
-          // 显示最新资讯的专题、标题，还有添加跳转url
         </View>
       </View>
     );
   }
 }
 
-//
+//新房筛选菜单模块
+class NewHouseScreenMenu extends Component {
+  render() {
+    return (
+      <View style={styles.newHouseScreenMenu}>
+        <View style={styles.newHouseScreenMenuList}>
+          <Text style={styles.newHouseScreenMenuText}>一室</Text>
+          <Text style={styles.newHouseScreenMenuText}>二室</Text>
+          <Text style={styles.newHouseScreenMenuText}>三室</Text>
+          <Text style={styles.newHouseScreenMenuText}>售罄</Text>
+          <Text style={styles.newHouseScreenMenuText}>在售</Text>
+          <Text style={styles.newHouseScreenMenuText}>待售</Text>
+          <Text style={styles.newHouseScreenMenuText}>5千以下</Text>
+          <Text style={styles.newHouseScreenMenuText}>5千-1万</Text>
+          <Text style={styles.newHouseScreenMenuText}>1-2万</Text>
+        </View>
+        <View>
+          <Text></Text>
+        </View>
+      </View>
+    );
+  }
+}
 
+
+//城市菜单
+class CityMenu extends Component {
+  render() {
+    return (
+      <Text>test</Text>
+    );
+  }
+}
 
 
 
@@ -392,4 +575,4 @@ class NewNews extends Component {
 
 
 //允许外部文件调用的模块
-export {Home, Header, Banner, Menu, NewNews};
+export {Home, Sidebar, CityMenu, Banner, Menu, NewNews};

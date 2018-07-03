@@ -17,7 +17,7 @@ import {
 import { StackNavigator } from 'react-navigation';
 
 //首页模块
-import { Home } from './Home';
+import { Home , CityMenu } from './Home';
 
 export default class App extends Component {
   render() {
@@ -57,8 +57,8 @@ const ModalStack = StackNavigator({
   Home: {
     screen: Home
   },
-  cityMenu: {
-    screen: cityMenu
+  CityMenu: {
+    screen: CityMenu
   },
   Test: {
     screen: Test

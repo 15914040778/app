@@ -240,8 +240,34 @@ const styles = StyleSheet.create({
     minWidth: Dimensions.get('window').width / 3,
     textAlign: 'center',
     marginTop: 5,
+  },
 
+  //热门推荐
+  hotNewHouse: {
+
+    marginLeft: 5,
+    marginRight: 5,
+    marginTop: 10,
+    marginBottom: 10,
+    backgroundColor: '#fff'
+  },
+  hotNewHouseTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    width: Dimensions.get('window').width
+  },
+  hotNewHousePage: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  hotNewHousePageOption: {
+    flex: 1,
+    maxWidth: Dimensions.get('window').width / 2,
+    minWidth: Dimensions.get('window').width / 2,
+    backgroundColor: '#ccc'
   }
+
+
 });
 //生命全局变量
 let that;
@@ -252,15 +278,7 @@ export default class Home extends Component {
     super(props);
 
     this.state = {
-      headerRightSidebar: true,
-      images: [
-        {
-          url:require('./src/images/index/banner01.jpg'),
-        },
-        {
-          url:require('./src/images/index/banner02.jpg'),
-        }
-      ],
+      headerRightSidebar: true
     };
     that = this;
   }
@@ -535,23 +553,98 @@ class NewNews extends Component {
 
 //新房筛选菜单模块
 class NewHouseScreenMenu extends Component {
+  constructor(props) {
+    super(props);
+    //设置state变量
+    this.state = {
+      data:[
+        {
+          id: 1,
+          title: '一室'
+        },
+        {
+          id: 2,
+          title: '二室'
+        },
+        {
+          id: 3,
+          title: '三室'
+        },
+        {
+          id: 3,
+          title: '售罄'
+        },
+        {
+          id: 3,
+          title: '在售'
+        },
+        {
+          id: 3,
+          title: '待售'
+        },
+        {
+          id: 3,
+          title: '5千以下'
+        },
+        {
+          id: 3,
+          title: '5千-1万'
+        },
+        {
+          id: 3,
+          title: '1-2万'
+        }
+      ]
+    };
+
+  }
   render() {
     return (
       <View style={styles.newHouseScreenMenu}>
         <View style={styles.newHouseScreenMenuList}>
-          <Text style={styles.newHouseScreenMenuText}>一室</Text>
-          <Text style={styles.newHouseScreenMenuText}>二室</Text>
-          <Text style={styles.newHouseScreenMenuText}>三室</Text>
-          <Text style={styles.newHouseScreenMenuText}>售罄</Text>
-          <Text style={styles.newHouseScreenMenuText}>在售</Text>
-          <Text style={styles.newHouseScreenMenuText}>待售</Text>
-          <Text style={styles.newHouseScreenMenuText}>5千以下</Text>
-          <Text style={styles.newHouseScreenMenuText}>5千-1万</Text>
-          <Text style={styles.newHouseScreenMenuText}>1-2万</Text>
+          {
+            this.state.data.map(function(obj , key){
+              <Text style={styles.newHouseScreenMenuText}>{obj.title}</Text>
+            })
+          }
         </View>
         <View>
-          <Text></Text>
+          <Text>查看更多></Text>
         </View>
+      </View>
+    );
+  }
+}
+
+//热门推荐(热门新房)
+class HotNewHouse extends Component {
+  render() {
+    return (
+      <View style={styles.hotNewHouse}>
+        <Text style={styles.hotNewHouseTitle}>热门推荐</Text>
+        <Swiper
+          style={styles.swiper}
+          height={250}
+          horizontal={true}
+          paginationStyle={{bottom: 10}}
+          showsButtons={false}
+          autoplay={true}
+          autoplayTimeout={3}>
+          <View style={styles.hotNewHousePage}>
+            <View style={styles.hotNewHousePageOption}>
+              <Image
+                source={require('http://m.shanghai.at58.com/wp-content/uploads/sites/25/2018/07/03/效果图1-300x179.jpeg')}
+                />
+                // 楼盘名称
+                <Text></Text>
+                // 楼盘地址
+                <Text></Text>
+                // 楼盘价格
+                <Text></Text>
+            </View>
+            <View></View>
+          </View>
+        </Swiper>
       </View>
     );
   }
